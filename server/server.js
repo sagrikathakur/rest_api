@@ -1,27 +1,16 @@
-// creating a server//
-
-import express from "express";
-import dotenv from "dotenv";
-import notesRoutes from "./routes/notesRoutes.js";
-
+import express from 'express';
+import dotenv from 'dotenv';
 dotenv.config();
 
-// creating a server instance//
+const app = express();
+const port = process.env.PORT ;
 
-const server = express();
-const port = process.env.PORT || 5000;
+app.use(express.json());
 
-// middleware//
-server.use(express.json());
-
-// routes//
-server.get("/", (req, res) => {
-  res.send("hello");
+app.get('/', (req, res) => {
+  res.send('Hello World!');
 });
 
-server.use("/notes", notesRoutes);
-
-// listen//
-server.listen(port, () => {
-  console.log(`server is running at ${port}`);
-});
+app.listen(port , ()=>{
+  console.log(`server running at http://localhost:${port}`);
+})

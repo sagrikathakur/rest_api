@@ -1,45 +1,82 @@
-import pool from "../config/db.js";
+import pool from "../config/db";
 
-// Create Note
-export const createNotes = async (data) => {
-  const { title, content } = data;
+// Create User
+export const createUsersModel = async (data) => {
+  const { name, email, age, gender } = data;
 
   const result = await pool.query(
-    `INSERT INTO notes (title, content)
-     VALUES ($1, $2)
+    `INSERT INTO users (name, email, age, gender)
+     VALUES ($1, $2, $3, $4)
      RETURNING *`,
-    [title, content]
+    [name, email, age, gender]
   );
 
   return result.rows[0];
 };
 
-// get all notes //
-
-export const getAllNotes = async () => {
+// Get All Users
+export const getAllUsersModel = async () => {
   const result = await pool.query(
-    `SELECT * FROM notes ORDER BY id DESC`,
-  )
+    `SELECT *
+     FROM users
+     ORDER BY id ASC`
+  );
+
   return result.rows;
-}
+};
 
-// get notes by id //
-export const getNotesById = async (id) => {
-  const result = await pool.query(`SELECT * FROM notes WHERE id = $1`, [id]);
-  return result.rows[0];
-}
-// update notes //
-export const updateNotes = async (id, data) => {
-  const { title, content } = data;
-  const result = await pool.query(`UPDATE notes SET title = $1, content = $2 WHERE id = $3 RETURNING *`, [title, content, id]);
-  return result.rows[0];
-}
-
-// delete notes//
-export const deleteNotes = async (id) => {
+// Get User By ID
+export const getUserByIdModel = async (id) => {
   const result = await pool.query(
-    `DELETE FROM notes WHERE id = $1 RETURNING *`,
+    `SELECT *
+     FROM users
+     WHERE id = $1`,
     [id]
   );
+
   return result.rows[0];
-};
+};
+
+// Update User
+export const updateUsersModel = async (data, id) => {
+  const { name, email, age, gender } = data;
+
+  const result = await pool.query(
+    `UPDATE users
+     SET
+       name = $1,
+       email = $2,
+       age = $3,
+       gender = $4
+     WHERE id = $5
+     RETURNING *`,
+    [name, email, age, gender, id]
+  );
+
+  return result.rows[0];
+};
+
+// Delete User
+export const deleteUsersModel = async (id) => {
+  const result = await pool.query(
+    `DELETE FROM users
+     WHERE id = $1
+     RETURNING *`,
+    [id]
+  );
+
+  return result.rows[0];
+};
+
+// Search Users By Name
+export const searchUsersModel = async (name) => {
+  const result = await pool.query(
+    `SELECT *
+     FROM users
+     WHERE name ILIKE $1
+     ORDER BY id ASC`,
+    [`%${name}%`]
+  );
+
+  return result.rows;
+};
