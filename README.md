@@ -1,40 +1,162 @@
-# 🧠 Mental Health Awareness API
+# REST API Playground 🚀
 
-The **Mental Health Awareness API** is a production-style RESTful backend application built with **Node.js**, **Express.js**, and **PostgreSQL (Neon)**. The project is designed to promote mental well-being by providing a secure platform where users can create personal profiles, track their daily moods, maintain private journal entries, build personalized safety plans, manage emergency contacts, complete mental health assessments and interact with an AI-powered support assistant. The API follows modern backend development practices, including JWT-based authentication, protected routes, request validation using Zod, centralized error handling and a well-structured MVC architecture.
+Welcome to my REST API Playground.
 
-This project is intended not only as a learning experience but also as a portfolio-quality backend application that demonstrates real-world software engineering concepts. The database is designed with proper normalization, primary and foreign key relationships, one-to-one and one-to-many associations and cascading operations where appropriate. Every endpoint is built according to RESTful principles and is designed to be scalable, maintainable and secure.
+This repository is my personal space where I practise backend development by building REST APIs from scratch. Instead of following tutorials without understanding the implementation I use this repository to experiment with ideas solve problems and improve my backend development skills through consistent practice.
 
-The application includes comprehensive CRUD functionality for user-managed resources such as profiles, mood logs, journals, safety plans, emergency contacts, and chat history. It also provides read-only resources like wellness tips and crisis resources to encourage healthy habits and provide quick access to professional support information. Future enhancements include role-based authorization for administrators, API documentation with Swagger, pagination and filtering, automated testing, deployment and continuous integration.
+Every feature in this repository is written as part of my learning journey. Some implementations may be simple while others may explore more advanced backend concepts. The main goal is to understand why something works and how it can be improved rather than simply making it work.
 
-## 🚀 Tech Stack
+---
 
-* **Runtime:** Node.js
-* **Framework:** Express.js
-* **Database:** PostgreSQL (Neon)
-* **Authentication:** JWT (JSON Web Token)
-* **Password Hashing:** bcrypt
-* **Validation:** Zod
-* **Database Driver:** pg
-* **Environment Variables:** dotenv
-* **Middleware:** Custom Authentication, Authorization, Validation, Global Error Handling
-* **API Testing:** Postman
-* **Version Control:** Git & GitHub
+# 🎯 Objectives
 
-## ✨ Core Features
+The purpose of this repository is to:
 
-* User registration and secure authentication
-* Protected routes using JWT
-* User profile management
-* Daily mood tracking
-* Personal journal management
-* Safety plan management
-* Emergency contact management
-* Mental health assessment records
-* AI-powered supportive chat
-* Notifications
-* Wellness tips
-* Crisis resource directory
-* Input validation with Zod
-* Global error handling
-* PostgreSQL relational database design
-* RESTful API architecture
+- Strengthen my understanding of REST API development.
+- Write clean and maintainable backend code.
+- Improve problem solving and backend logic.
+- Learn how different API components work together.
+- Experiment with new backend concepts in a safe environment.
+- Practise writing scalable Express.js applications.
+- Build confidence before applying concepts to larger production projects.
+
+---
+
+# 📚 Topics Covered
+
+As I continue learning this repository may include:
+
+### API Development
+- REST API principles
+- CRUD operations
+- Resource design
+- API versioning
+- Route organisation
+
+### Express.js
+- Express fundamentals
+- Routing
+- Middleware
+- Error handling
+- Custom middleware
+- Async programming
+- Environment variables
+
+### Database
+- PostgreSQL
+- SQL queries
+- Table relationships
+- Constraints
+- Indexes
+- Transactions
+- Joins
+- Aggregations
+
+### Validation
+- Request validation
+- Schema validation
+- Data sanitisation
+- Custom validation
+
+### Authentication & Authorization
+- JWT authentication
+- Password hashing
+- Protected routes
+- Role based access control
+- Refresh tokens
+
+### API Features
+- Pagination
+- Searching
+- Filtering
+- Sorting
+- File uploads
+- Rate limiting
+- Caching
+- Logging
+
+### Backend Best Practices
+- MVC architecture
+- Clean folder structure
+- Code reusability
+- Error responses
+- HTTP status codes
+- Security practices
+- Performance optimisation
+
+---
+
+# 🛠 Tech Stack
+
+- JavaScript
+- Node.js
+- Express.js
+- PostgreSQL
+- REST API
+
+---
+
+# 📂 Repository Structure
+
+The structure of this repository may evolve as I learn new concepts and adopt better development practices.
+
+```
+.
+├── src
+│   ├── config
+│   ├── controllers
+│   ├── middleware
+│   ├── models
+│   ├── routes
+│   ├── services
+│   ├── utils
+│   └── app.js
+├── package.json
+└── README.md
+```
+
+---
+
+# 🚀 Why This Repository Exists
+
+Learning backend development requires much more than watching tutorials. It requires writing code making mistakes debugging issues and understanding why a solution works.
+
+This repository serves as my development sandbox where I can explore new ideas test different approaches and improve my understanding of backend engineering without worrying about production code.
+
+Some projects inside this repository may be small while others may grow into complete applications. Every commit represents progress and every bug is an opportunity to learn something new.
+
+---
+
+# 📈 Current Learning Goals
+
+Some of the concepts I am actively practising include:
+
+- Building scalable REST APIs
+- Writing efficient SQL queries
+- Designing relational databases
+- Implementing authentication and authorization
+- Writing reusable middleware
+- Improving API security
+- Structuring backend applications
+- Writing cleaner and more maintainable code
+- Following backend best practices
+
+---
+
+# ⚠️ Disclaimer
+
+This repository is intended for learning and experimentation. Code may change frequently as I discover better solutions refactor existing implementations and explore new backend concepts.
+
+Not every implementation represents a production ready solution because the primary objective is continuous learning and practical experience.
+
+---
+
+# 🌱 Learning Philosophy
+
+I believe the best way to learn backend development is by building real projects solving real problems and understanding every piece of code that I write.
+
+This repository documents that journey one API one feature and one lesson at a time.
+
+---
+
+**Thank you for visiting my repository. If you have suggestions or feedback I would be happy to learn from them.**
