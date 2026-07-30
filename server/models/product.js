@@ -1,7 +1,7 @@
-import pool from "../config/db";
+import pool from "../config/db.js";
 
 // Create User
-export const createUsersModel = async (data) => {
+export const createUsersModel = async (data = {}) => {
   const { name, email, age, gender } = data;
 
   const result = await pool.query(
@@ -38,7 +38,7 @@ export const getUserByIdModel = async (id) => {
 };
 
 // Update User
-export const updateUsersModel = async (data, id) => {
+export const updateUsersModel = async (data = {}, id) => {
   const { name, email, age, gender } = data;
 
   const result = await pool.query(
