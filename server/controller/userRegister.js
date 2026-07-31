@@ -1,31 +1,32 @@
 import bcrypt from "bcrypt";
 import { createnewUser } from "../models/userModel.js";
-import e from "cors";
 
 export const userRegisterController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({
-        messsage: "all fields are required"
-      })
+        message: "all fields are required"
+      });
     }
-    // password hashing//
-    const hashed = await bcrypt.hash(0, 10);
-    const user = await createnewUser(
+    // password hashing //
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await createnewUser({
       name,
       email,
-      password
-    )
+      password: hashedPassword
+    });
     res.status(200).json({
-      succes: true,
-      messsage: "user is registerd"
-    })
+      success: true,
+      message: "user is registered",
+      data: user
+    });
   } catch (error) {
-    console.log(error)
+    console.log("Registration error:", error);
     res.status(500).json({
-      messsage: "server internal error"
-    })
-
+      success: false,
+      message: "server internal error",
+      error: error.message
+    });
   }
-}
+};

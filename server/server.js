@@ -12,7 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/users', usersRoutes);
-app.use('api/userRegister', userRegisterRoutes);
+app.use('/api/register', userRegisterRoutes);
+app.use('/api/userRegister', userRegisterRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
