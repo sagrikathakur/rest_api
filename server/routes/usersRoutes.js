@@ -5,7 +5,7 @@ import {
   getUserByIdController,
   updateUserController,
   deleteUserController,
-  searchUserController
+  searchUserController,
 } from '../controller/product.controller.js';
 
 const router = express.Router();
@@ -18,4 +18,4 @@ router.get('/:id', getUserByIdController);
 router.put('/:id', updateUserController);
 router.delete('/:id', deleteUserController);
 
-export default router;
+export default router;
