@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import usersRoutes from './routes/usersRoutes.js';
-
+import userRegisterRoutes from './routes/userRegisterRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -12,11 +12,12 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/users', usersRoutes);
+app.use('api/userRegister', userRegisterRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(port , ()=>{
+app.listen(port, () => {
   console.log(`server running at http://localhost:${port}`);
-});
+});
