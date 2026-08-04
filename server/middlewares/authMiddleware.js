@@ -11,7 +11,7 @@ export const verifyToken = (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const secret = process.env.JWT_SECRET || 'supersecretkey_for_learning_auth_12345';
+    const secret = process.env.JWT_SECRET;
 
     const decoded = jwt.verify(token, secret);
     req.user = decoded;
