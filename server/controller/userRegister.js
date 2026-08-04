@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { createRegister, emailCheck } from "../models/userModel.js";
+import { createRegister, emailCheck, getAllUsers } from "../models/userModel.js";
 import { registerSchema } from "../validations/userRegisterValidate.js";
 
 export const registerUserController = async (req, res) => {
@@ -57,3 +57,20 @@ export const registerUserController = async (req, res) => {
   }
 };
 
+// GET ALL//
+export const getAllUserController = async (req, res) => {
+  try {
+    const userGet = await getAllUsers();
+    return res.status(200).json({
+      success: true,
+      message: "All users fetched successfully",
+      users: userGet
+    });
+  } catch (error) {
+    console.error("All users fetch error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "All users fetch failed. Please try again."
+    });
+  }
+};

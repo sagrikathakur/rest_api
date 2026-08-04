@@ -20,5 +20,13 @@ export const emailCheck = async (email) => {
   );
   return result.rows[0];
 };
+// get all //
+export const getAllUsers = async () => {
+  const result = await pool.query(
+    `SELECT id, name, email FROM userRegister`
+  );
+  return result.rows;
+};
+
 
 
