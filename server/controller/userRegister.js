@@ -1,28 +1,11 @@
 import bcrypt from "bcrypt";
 import { createRegister, emailCheck, getAllUsers } from "../models/userModel.js";
-import { registerSchema } from "../validations/userRegisterValidate.js";
 
 export const registerUserController = async (req, res) => {
   try {
-    // Validate request body with Zod schema (includes confirmPassword check)
-    const validationResult = registerSchema.safeParse(req.body);
-    if (!validationResult.success) {
-      const firstErrorMsg = validationResult.error.issues[0]?.message || "Validation failed";
-      const formattedErrors = validationResult.error.issues.map((issue) => ({
-        field: issue.path.join('.'),
-        message: issue.message
-      }));
+    const { name, email, password } = req.body;
 
-      return res.status(400).json({
-        success: false,
-        message: firstErrorMsg,
-        errors: formattedErrors
-      });
-    }
-
-    const { name, email, password } = validationResult.data;
-
-    // find user by email
+    // Check if email exists
     const emailCheckController = await emailCheck(email);
     if (emailCheckController) {
       return res.status(409).json({
@@ -56,6 +39,7 @@ export const registerUserController = async (req, res) => {
     });
   }
 };
+
 
 // GET ALL//
 export const getAllUserController = async (req, res) => {

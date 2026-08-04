@@ -1,19 +1,12 @@
 export const validate = (schema) => (req, res, next) => {
-  const validationResult = schema.safeParse(req.body);
-  if (!validationResult.success) {
-    const firstErrorMsg = validationResult.error.issues[0]?.message || "Validation failed";
-    const formattedErrors = validationResult.error.issues.map((issue) => ({
-      field: issue.path.join('.'),
-      message: issue.message
-    }));
+  const result = schema.safeParse(req.body);
 
+  if (!result.success) {
     return res.status(400).json({
       success: false,
-      message: firstErrorMsg,
-      errors: formattedErrors
+      message: result.error.issues[0]?.message || "Validation failed"
     });
   }
 
-  req.validatedBody = validationResult.data;
   next();
 };
