@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { HeartHandshake, ShieldCheck, Lock } from 'lucide-react';
 
-export default function SignInForm({ onLoginSuccess, initialEmail = '' }) {
+export default function SignInForm({ onLoginSuccess, onNavigateToSignUp, initialEmail = '' }) {
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -33,48 +34,71 @@ export default function SignInForm({ onLoginSuccess, initialEmail = '' }) {
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-      <p className="text-sm text-slate-400 mb-6">Enter your credentials to sign in.</p>
+    <div className="premium-card p-8 rounded-3xl max-w-md mx-auto w-full space-y-6 shadow-xl">
+      <div className="text-center space-y-2">
+        <div className="inline-flex p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl shadow-md shadow-emerald-500/20 mb-1">
+          <HeartHandshake className="w-6 h-6" />
+        </div>
+        <h2 className="text-2xl font-extrabold text-teal-950 tracking-tight">Welcome Back to MindCare</h2>
+        <p className="text-xs text-teal-700 font-medium">Sign in to access your confidential care portal.</p>
+      </div>
 
       {error && (
-        <div className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium">
+        <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">Email</label>
+          <label className="block text-xs font-bold text-teal-950 mb-1.5">Email address</label>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="john@example.com"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            placeholder="name@example.com"
+            className="w-full px-4 py-3 rounded-2xl bg-white border border-teal-200 text-xs font-semibold text-teal-950 placeholder-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">Password</label>
+          <label className="block text-xs font-bold text-teal-950 mb-1.5">Password</label>
           <input
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full px-4 py-3 rounded-2xl bg-white border border-teal-200 text-xs font-semibold text-teal-950 placeholder-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-colors disabled:opacity-50 mt-2"
+          className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs transition-all disabled:opacity-50 mt-2 cursor-pointer shadow-lg shadow-emerald-600/20 active:scale-95"
         >
           {loading ? 'Signing In...' : 'Sign In'}
         </button>
+
+        <div className="flex items-center justify-center gap-1.5 text-[11px] text-teal-700 pt-3 border-t border-teal-50 font-medium">
+          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <span>Strictly confidential & HIPAA compliant</span>
+        </div>
+
+        {onNavigateToSignUp && (
+          <p className="text-center text-xs text-teal-800 pt-1 font-medium">
+            New to MindCare?{' '}
+            <button
+              type="button"
+              onClick={onNavigateToSignUp}
+              className="text-emerald-700 font-extrabold hover:underline cursor-pointer"
+            >
+              Create Free Account
+            </button>
+          </p>
+        )}
       </form>
     </div>
   );

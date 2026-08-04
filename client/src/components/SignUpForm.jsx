@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { HeartHandshake, ShieldCheck } from 'lucide-react';
 
-export default function SignUpForm({ onSuccess }) {
+export default function SignUpForm({ onSuccess, onNavigateToSignIn }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,7 +31,7 @@ export default function SignUpForm({ onSuccess }) {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        setSuccess('Account registered successfully! You can now log in.');
+        setSuccess('Account created successfully! You can now log in.');
         setFormData({ name: '', email: '', password: '', confirmPassword: '' });
         if (onSuccess) onSuccess(formData.email);
       } else {
@@ -44,51 +45,56 @@ export default function SignUpForm({ onSuccess }) {
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-white mb-2">Create Account</h2>
-      <p className="text-sm text-slate-400 mb-6">Sign up to get started.</p>
+    <div className="premium-card p-8 rounded-3xl max-w-md mx-auto w-full space-y-6 shadow-xl">
+      <div className="text-center space-y-2">
+        <div className="inline-flex p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl shadow-md shadow-emerald-500/20 mb-1">
+          <HeartHandshake className="w-6 h-6" />
+        </div>
+        <h2 className="text-2xl font-extrabold text-teal-950 tracking-tight">Join MindCare Today</h2>
+        <p className="text-xs text-teal-700 font-medium">Create your private care account to start your journey.</p>
+      </div>
 
       {error && (
-        <div className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium">
+        <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
+        <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold">
           {success}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">Full Name</label>
+          <label className="block text-xs font-bold text-teal-950 mb-1.5">Full Name</label>
           <input
             type="text"
             name="name"
             required
             value={formData.name}
             onChange={handleChange}
-            placeholder="John Doe"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            placeholder="Jane Doe"
+            className="w-full px-4 py-3 rounded-2xl bg-white border border-teal-200 text-xs font-semibold text-teal-950 placeholder-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">Email</label>
+          <label className="block text-xs font-bold text-teal-950 mb-1.5">Email address</label>
           <input
             type="email"
             name="email"
             required
             value={formData.email}
             onChange={handleChange}
-            placeholder="john@example.com"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            placeholder="jane@example.com"
+            className="w-full px-4 py-3 rounded-2xl bg-white border border-teal-200 text-xs font-semibold text-teal-950 placeholder-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">Password</label>
+          <label className="block text-xs font-bold text-teal-950 mb-1.5">Password</label>
           <input
             type="password"
             name="password"
@@ -96,12 +102,12 @@ export default function SignUpForm({ onSuccess }) {
             value={formData.password}
             onChange={handleChange}
             placeholder="••••••••"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full px-4 py-3 rounded-2xl bg-white border border-teal-200 text-xs font-semibold text-teal-950 placeholder-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">Confirm Password</label>
+          <label className="block text-xs font-bold text-teal-950 mb-1.5">Confirm Password</label>
           <input
             type="password"
             name="confirmPassword"
@@ -109,17 +115,35 @@ export default function SignUpForm({ onSuccess }) {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder="••••••••"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full px-4 py-3 rounded-2xl bg-white border border-teal-200 text-xs font-semibold text-teal-950 placeholder-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-colors disabled:opacity-50 mt-2"
+          className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs transition-all disabled:opacity-50 mt-2 cursor-pointer shadow-lg shadow-emerald-600/20 active:scale-95"
         >
-          {loading ? 'Registering...' : 'Sign Up'}
+          {loading ? 'Creating Account...' : 'Get Started'}
         </button>
+
+        <div className="flex items-center justify-center gap-1.5 text-[11px] text-teal-700 pt-3 border-t border-teal-50 font-medium">
+          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <span>Encrypted storage & confidential care guarantee</span>
+        </div>
+
+        {onNavigateToSignIn && (
+          <p className="text-center text-xs text-teal-800 pt-1 font-medium">
+            Already have an account?{' '}
+            <button
+              type="button"
+              onClick={onNavigateToSignIn}
+              className="text-emerald-700 font-extrabold hover:underline cursor-pointer"
+            >
+              Sign In
+            </button>
+          </p>
+        )}
       </form>
     </div>
   );

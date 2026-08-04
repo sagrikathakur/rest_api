@@ -1,18 +1,23 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { createRegister, emailCheck, getAllUsers } from "../models/userModel.js";
+import {
+  createRegister,
+  emailCheck,
+  getAllUsers,
+} from "../models/userModel.js";
 
 // REGISTER USER
 export const registerUserController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if email exists
+    // Check if email already exists
     const existingUser = await emailCheck(email);
+
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: 'Email already registered. Please sign in instead.'
+        message: "Email already registered. Please sign in instead.",
       });
     }
 
@@ -23,25 +28,20 @@ export const registerUserController = async (req, res) => {
     const user = await createRegister({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     return res.status(201).json({
       success: true,
-      message: "Registration successful! You can now log in.",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      }
+      message: "Registration successful!",
+      user,
     });
-
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("Registration Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Registration failed. Please try again."
+      message: "Internal Server Error",
     });
   }
 };
@@ -51,65 +51,75 @@ export const loginUserController = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. Find user by email
+    // Find user
     const user = await emailCheck(email);
+
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password.'
+        message: "Invalid email or password",
       });
     }
 
-    // 2. Compare entered password with stored hashed password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    // Compare password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      user.password
+    );
+
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password.'
+        message: "Invalid email or password",
       });
     }
 
-    // 3. Generate JWT Token
-    const secret = process.env.JWT_SECRET || 'supersecretkey_for_learning_auth_12345';
+    // Generate JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, name: user.name },
-      secret,
-      { expiresIn: '1h' }
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
     );
 
     return res.status(200).json({
       success: true,
-      message: "Login successful!",
+      message: "Login successful",
       token,
       user: {
         id: user.id,
         name: user.name,
-        email: user.email
-      }
+        email: user.email,
+      },
     });
-
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Login Error:", error);
+
     return res.status(500).json({
       success: false,
-      message: "Login failed due to a server error."
+      message: "Internal Server Error",
     });
   }
 };
 
-// GET AUTHENTICATED USER PROFILE (/api/me)
+// GET LOGGED-IN USER
 export const getMeController = async (req, res) => {
   try {
-    // req.user is set by verifyToken middleware
     return res.status(200).json({
       success: true,
-      message: "Profile retrieved successfully using valid JWT token.",
-      user: req.user
+      message: "User profile fetched successfully",
+      user: req.user,
     });
   } catch (error) {
+    console.error("Get Me Error:", error);
+
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch user profile."
+      message: "Internal Server Error",
     });
   }
 };
@@ -117,17 +127,19 @@ export const getMeController = async (req, res) => {
 // GET ALL USERS
 export const getAllUserController = async (req, res) => {
   try {
-    const userGet = await getAllUsers();
+    const users = await getAllUsers();
+
     return res.status(200).json({
       success: true,
-      message: "All users fetched successfully",
-      users: userGet
+      message: "Users fetched successfully",
+      users,
     });
   } catch (error) {
-    console.error("All users fetch error:", error);
+    console.error("Get All Users Error:", error);
+
     return res.status(500).json({
       success: false,
-      message: "All users fetch failed. Please try again."
+      message: "Internal Server Error",
     });
   }
 };
