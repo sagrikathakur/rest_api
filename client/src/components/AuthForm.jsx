@@ -37,8 +37,8 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
 
     const endpoint = mode === 'login' ? 'http://localhost:3000/api/login' : 'http://localhost:3000/api/register';
     const body = mode === 'login'
-      ? { email: formData.email, password: formData.password }
-      : formData;
+      ? { email: formData.email.trim(), password: formData.password }
+      : { ...formData, email: formData.email.trim() };
 
     try {
       const res = await fetch(endpoint, {
@@ -56,7 +56,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
             if (data.refreshToken) {
               localStorage.setItem('refreshToken', data.refreshToken);
             }
-            if (onLoginSuccess) onLoginSuccess(tokenToUse);
+            if (onLoginSuccess) onLoginSuccess(tokenToUse, data.user);
           } else {
             setError('Login succeeded but no token was returned.');
           }
@@ -141,6 +141,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
             <input
               type="text"
               name="name"
+              autoComplete="name"
               required
               value={formData.name}
               onChange={handleChange}
@@ -155,6 +156,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
           <input
             type="email"
             name="email"
+            autoComplete="email"
             required
             value={formData.email}
             onChange={handleChange}
@@ -168,6 +170,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
           <input
             type="password"
             name="password"
+            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
             required
             value={formData.password}
             onChange={handleChange}
@@ -182,6 +185,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
             <input
               type="password"
               name="confirmPassword"
+              autoComplete="new-password"
               required
               value={formData.confirmPassword}
               onChange={handleChange}

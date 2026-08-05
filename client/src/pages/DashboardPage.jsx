@@ -3,13 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { Heart, Sparkles, Smile, Calendar, Clock, Play, Pause, User, ArrowRight, BookOpen, ShieldCheck, Flame, Award, CheckCircle2 } from 'lucide-react';
 import { doctors, assets } from '../assets/assets_frontend/assets';
 
-export default function DashboardPage({ token, onLogout }) {
+export default function DashboardPage({ token, user: initialUser, onLogout }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(initialUser || null);
+  const [loading, setLoading] = useState(!initialUser);
   const [selectedMood, setSelectedMood] = useState('Peaceful');
   const [breathingTime, setBreathingTime] = useState(300);
   const [isBreathing, setIsBreathing] = useState(false);
+
+  useEffect(() => {
+    if (initialUser) {
+      setUser(initialUser);
+      setLoading(false);
+    }
+  }, [initialUser]);
 
   useEffect(() => {
     const fetchMe = async () => {
@@ -25,8 +32,8 @@ export default function DashboardPage({ token, onLogout }) {
         setLoading(false);
       }
     };
-    if (token) fetchMe();
-  }, [token]);
+    if (token && !initialUser) fetchMe();
+  }, [token, initialUser]);
 
   useEffect(() => {
     let timer;

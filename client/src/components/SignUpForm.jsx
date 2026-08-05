@@ -98,6 +98,7 @@ export default function SignUpForm({ onSuccess, onNavigateToSignIn }) {
           <input
             type="password"
             name="password"
+            autoComplete="new-password"
             required
             value={formData.password}
             onChange={handleChange}
@@ -111,6 +112,7 @@ export default function SignUpForm({ onSuccess, onNavigateToSignIn }) {
           <input
             type="password"
             name="confirmPassword"
+            autoComplete="new-password"
             required
             value={formData.confirmPassword}
             onChange={handleChange}

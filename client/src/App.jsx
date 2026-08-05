@@ -30,7 +30,14 @@ export default function App() {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
-        if (res.ok && data.user) setUser(data.user);
+        if (res.ok && data.user) {
+          setUser(data.user);
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+          setToken('');
+          setUser(null);
+        }
       } catch (err) {
         console.error('Failed to fetch user profile:', err);
       }
@@ -53,8 +60,10 @@ export default function App() {
     navigate('/login');
   };
 
-  const handleLoginSuccess = (newToken) => {
+  const handleLoginSuccess = (newToken, userObj) => {
+    localStorage.setItem('token', newToken);
     setToken(newToken);
+    if (userObj) setUser(userObj);
     navigate('/dashboard');
   };
 
@@ -147,7 +156,7 @@ export default function App() {
               path="/dashboard"
               element={
                 token ? (
-                  <DashboardPage token={token} onLogout={handleLogout} />
+                  <DashboardPage token={token} user={user} onLogout={handleLogout} />
                 ) : (
                   <div className="bg-white border border-slate-200 rounded-3xl p-8 text-center max-w-md mx-auto space-y-4 shadow-xs">
                     <h3 className="text-lg font-bold text-slate-900">Care Portal Required</h3>

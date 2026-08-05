@@ -58,6 +58,7 @@ export default function SignInForm({ onLoginSuccess, onNavigateToSignUp, initial
           <label className="block text-xs font-bold text-teal-950 mb-1.5">Email address</label>
           <input
             type="email"
+            autoComplete="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -70,6 +71,7 @@ export default function SignInForm({ onLoginSuccess, onNavigateToSignUp, initial
           <label className="block text-xs font-bold text-teal-950 mb-1.5">Password</label>
           <input
             type="password"
+            autoComplete="current-password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
