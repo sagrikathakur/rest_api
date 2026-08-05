@@ -5,6 +5,7 @@ import {
   emailCheck,
   getAllUsers,
 } from "../models/userModel.js";
+import { blacklistToken } from "../models/blacklistModel.js";
 
 // REGISTER USER
 export const registerUserController = async (req, res) => {
@@ -140,6 +141,39 @@ export const getAllUserController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
+    });
+  }
+};
+
+// LOGOUT USER
+export const logoutUserController = async (req, res) => {
+  try {
+    const token = req.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'No token provided for logout.'
+      });
+    }
+
+    const decoded = jwt.decode(token);
+    const expiresAt = decoded && decoded.exp 
+      ? new Date(decoded.exp * 1000) 
+      : new Date(Date.now() + 60 * 60 * 1000);
+
+    await blacklistToken(token, expiresAt);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Logout successful. Token has been invalidated.'
+    });
+  } catch (error) {
+    console.error('Logout Error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error'
     });
   }
 };

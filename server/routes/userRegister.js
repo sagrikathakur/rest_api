@@ -2,6 +2,7 @@ import express from 'express';
 import { 
   registerUserController, 
   loginUserController, 
+  logoutUserController,
   getMeController, 
   getAllUserController 
 } from '../controller/userRegister.js';
@@ -15,6 +16,7 @@ const router = express.Router();
 // Authentication Routes
 router.post('/register', validate(registerSchema), registerUserController);
 router.post('/login', validate(loginSchema), loginUserController);
+router.post('/logout', verifyToken, logoutUserController);
 
 // Protected User Route (Requires Bearer JWT token header)
 router.get('/me', verifyToken, getMeController);
