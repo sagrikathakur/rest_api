@@ -8,11 +8,14 @@ import { errorHandler } from './middlewares/errorHandler.js';
 dotenv.config();
 
 const myServer = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 // Middlewares
 myServer.use(cors());
+myServer.use(express.json());
+myServer.use(express.urlencoded({ extended: true }));
 myServer.use(safeJsonParser);
+
 
 // Routes
 myServer.get('/', (req, res) => {
