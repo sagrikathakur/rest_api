@@ -73,7 +73,7 @@ export default function MyProducts({ user }) {
             <Heart className="w-6 h-6 text-emerald-600" />
             Find Certified Therapists & Care Specialists
           </h2>
-          <p className="text-xs text-teal-700 mt-1">Book confidential, HIPAA-compliant 1-on-1 therapy sessions</p>
+          <p className="text-xs text-teal-700 mt-1">Book confidential 1-on-1 therapy sessions</p>
         </div>
       </div>
 

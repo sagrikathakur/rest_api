@@ -13,7 +13,7 @@ export default function UserProfile({ user, token }) {
           <h2 className="text-2xl font-extrabold text-teal-950">{user?.name || 'Care Account'}</h2>
           <p className="text-xs font-semibold text-teal-700">{user?.email || 'user@example.com'}</p>
           <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-900 bg-emerald-100/80 border border-emerald-300 px-3 py-1 rounded-full mt-1">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" /> Encrypted HIPAA-Compliant Account
+            <ShieldCheck className="w-4 h-4 text-emerald-600" /> Encrypted & Private Account
           </span>
         </div>
       </div>
@@ -51,7 +51,7 @@ export default function UserProfile({ user, token }) {
           <div className="flex items-center justify-between p-4 rounded-2xl bg-teal-50/50 border border-teal-100">
             <span className="text-teal-700 flex items-center gap-2"><Lock className="w-4 h-4 text-emerald-600" /> Privacy Protection</span>
             <span className="font-bold text-teal-950 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" /> Active HIPAA End-to-End Encryption
+              <ShieldCheck className="w-4 h-4 text-emerald-600" /> Active End-to-End Encryption
             </span>
           </div>
         </div>

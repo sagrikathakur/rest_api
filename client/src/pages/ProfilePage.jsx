@@ -14,7 +14,7 @@ export default function ProfilePage({ user }) {
           <h2 className="text-xl font-extrabold text-slate-900">{user?.name || 'Care Account'}</h2>
           <p className="text-xs text-slate-500 font-semibold">{user?.email || 'user@example.com'}</p>
           <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-0.5 rounded-full mt-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Encrypted HIPAA-Compliant Account
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Encrypted & Private Account
           </span>
         </div>
       </div>
@@ -52,7 +52,7 @@ export default function ProfilePage({ user }) {
           <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200">
             <span className="text-slate-500 flex items-center gap-2"><Lock className="w-4 h-4 text-emerald-600" /> Data Privacy</span>
             <span className="font-bold text-slate-900 flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Active HIPAA Protection
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Active Data Protection
             </span>
           </div>
         </div>

@@ -22,7 +22,7 @@ export default function HomePage({ token, setPage }) {
           </h1>
 
           <p className="text-xs sm:text-base text-teal-800/80 max-w-2xl mx-auto leading-relaxed">
-            Connect with licensed therapists, track your daily emotional journey, and practice mindfulness with 100% HIPAA-compliant security.
+            Connect with licensed therapists, track your daily emotional journey, and practice mindfulness with 100% end-to-end security.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -78,7 +78,7 @@ export default function HomePage({ token, setPage }) {
           </div>
           <div className="space-y-0.5">
             <p className="text-2xl font-extrabold text-teal-950">100%</p>
-            <p className="text-[11px] font-bold text-teal-700">HIPAA & Data Private</p>
+            <p className="text-[11px] font-bold text-teal-700">Encrypted & Private</p>
           </div>
           <div className="space-y-0.5">
             <p className="text-2xl font-extrabold text-teal-950">24 / 7</p>
@@ -148,7 +148,7 @@ export default function HomePage({ token, setPage }) {
             <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl w-fit shadow-md shadow-emerald-500/20">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-extrabold text-teal-950">HIPAA Compliant</h3>
+            <h3 className="text-sm font-extrabold text-teal-950">100% Confidential</h3>
             <p className="text-xs text-teal-800/80 leading-relaxed">
               Your privacy is paramount. End-to-end encrypted storage guarantees total confidentiality.
             </p>

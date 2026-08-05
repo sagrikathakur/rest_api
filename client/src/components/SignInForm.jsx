@@ -84,7 +84,7 @@ export default function SignInForm({ onLoginSuccess, onNavigateToSignUp, initial
 
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-teal-700 pt-3 border-t border-teal-50 font-medium">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>Strictly confidential & HIPAA compliant</span>
+          <span>Strictly confidential & 100% secure</span>
         </div>
 
         {onNavigateToSignUp && (
