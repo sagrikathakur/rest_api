@@ -20,9 +20,13 @@ export default function SignInForm({ onLoginSuccess, onNavigateToSignUp, initial
       });
       const data = await res.json();
 
-      if (res.ok && data.success && data.token) {
-        localStorage.setItem('token', data.token);
-        if (onLoginSuccess) onLoginSuccess(data.token);
+      const tokenToUse = data.accessToken || data.token;
+      if (res.ok && data.success && tokenToUse) {
+        localStorage.setItem('token', tokenToUse);
+        if (data.refreshToken) {
+          localStorage.setItem('refreshToken', data.refreshToken);
+        }
+        if (onLoginSuccess) onLoginSuccess(tokenToUse);
       } else {
         setError(data.message || 'Invalid credentials.');
       }

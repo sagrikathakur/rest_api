@@ -50,9 +50,15 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
 
       if (res.ok && data.success) {
         if (mode === 'login') {
-          if (data.token) {
-            localStorage.setItem('token', data.token);
-            if (onLoginSuccess) onLoginSuccess(data.token);
+          const tokenToUse = data.accessToken || data.token;
+          if (tokenToUse) {
+            localStorage.setItem('token', tokenToUse);
+            if (data.refreshToken) {
+              localStorage.setItem('refreshToken', data.refreshToken);
+            }
+            if (onLoginSuccess) onLoginSuccess(tokenToUse);
+          } else {
+            setError('Login succeeded but no token was returned.');
           }
         } else {
           setSuccess('Account created successfully! You can now sign in.');
