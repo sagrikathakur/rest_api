@@ -1,26 +1,5 @@
 import pool from "../config/db.js";
 
-// Auto-create refresh_tokens table if not exists
-export const initRefreshTokenTable = async () => {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS refresh_tokens (
-        id SERIAL PRIMARY KEY,
-        user_id INT NOT NULL REFERENCES userRegister(id) ON DELETE CASCADE,
-        token TEXT UNIQUE NOT NULL,
-        expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
-        is_revoked BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE INDEX IF NOT EXISTS idx_refresh_tokens_token ON refresh_tokens(token);
-      CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id);
-    `);
-  } catch (err) {
-    console.error("Error auto-creating refresh_tokens table:", err.message);
-  }
-};
-initRefreshTokenTable();
-
 // Save a new refresh token
 export const createRefreshToken = async (userId, token, expiresAt) => {
   const result = await pool.query(
