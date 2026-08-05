@@ -361,8 +361,12 @@ async function handleLogin(e) {
     const data = await response.json();
     setBtnLoading(loginSubmitBtn, false);
 
-    if (response.ok && data.success && data.token) {
-      saveToken(data.token);
+    const tokenToSave = data.accessToken || data.token;
+    if (response.ok && data.success && tokenToSave) {
+      saveToken(tokenToSave);
+      if (data.refreshToken) {
+        saveRefreshToken(data.refreshToken);
+      }
       updateAuthUI();
       showAlert('Signed in successfully! Your JWT Token is active.', 'success');
       switchTab('dashboardTab');
@@ -449,8 +453,21 @@ function simulateCorruptToken() {
   showAlert('Token corrupted! Try clicking "Fetch /api/me" to see how the server rejects invalid tokens.', 'error');
 }
 
-function handleLogout() {
+async function handleLogout() {
+  const refreshToken = getRefreshToken();
+  if (!isMockMode && refreshToken) {
+    try {
+      await fetch(`${API_BASE_URL}/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken })
+      });
+    } catch (err) {
+      console.error('Logout request error:', err);
+    }
+  }
   removeToken();
+  removeRefreshToken();
   updateAuthUI();
   showAlert('Logged out. Token cleared from localStorage.', 'info');
   switchTab('loginTab');
@@ -467,6 +484,18 @@ function getToken() {
 
 function removeToken() {
   localStorage.removeItem('auth_token');
+}
+
+function saveRefreshToken(token) {
+  localStorage.setItem('refresh_token', token);
+}
+
+function getRefreshToken() {
+  return localStorage.getItem('refresh_token');
+}
+
+function removeRefreshToken() {
+  localStorage.removeItem('refresh_token');
 }
 
 function updateAuthUI() {
