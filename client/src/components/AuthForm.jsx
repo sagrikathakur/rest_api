@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { HeartHandshake, ShieldCheck, LogIn, UserPlus, KeyRound, ArrowRight, CheckCircle2, Lock } from 'lucide-react';
+import { HeartHandshake, ShieldCheck, LogIn, UserPlus, KeyRound, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegisterSuccess, initialEmail = '' }) {
-  const [mode, setMode] = useState(initialTab); // 'login' | 'register' | 'otp' | 'forgot'
+  const [mode, setMode] = useState(initialTab); // 'login' | 'register' | 'forgot'
   const [formData, setFormData] = useState({
     name: '',
     email: initialEmail,
@@ -10,14 +10,10 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
     confirmPassword: ''
   });
 
-  // OTP Verification State
+  // Forgot Password State (Uses OTP)
   const [otp, setOtp] = useState('');
-  const [otpStep, setOtpStep] = useState(1); // 1: send OTP, 2: verify code
-  const [receivedOtpHint, setReceivedOtpHint] = useState('');
-  const [otpVerified, setOtpVerified] = useState(false);
-
-  // Forgot Password State
   const [forgotStep, setForgotStep] = useState(1); // 1: send OTP, 2: reset password
+  const [receivedOtpHint, setReceivedOtpHint] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
@@ -34,11 +30,9 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
     setError('');
     setSuccess('');
     setOtp('');
-    setOtpStep(1);
     setForgotStep(1);
     setNewPassword('');
     setConfirmNewPassword('');
-    setOtpVerified(false);
     setReceivedOtpHint('');
   };
 
@@ -95,11 +89,11 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
     }
   };
 
-  // Handle Send OTP (POST /auth/send-otp)
-  const handleSendOtp = async (e, targetStepSetter) => {
-    e?.preventDefault();
+  // Handle Send Reset OTP (POST /auth/send-otp)
+  const handleSendResetOtp = async (e) => {
+    e.preventDefault();
     if (!formData.email) {
-      setError('Please enter a valid email address.');
+      setError('Please enter your registered email address.');
       return;
     }
 
@@ -118,7 +112,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
       if (res.ok && data.success) {
         setSuccess(`Verification OTP sent to ${formData.email.trim()}`);
         if (data.otp) setReceivedOtpHint(data.otp);
-        targetStepSetter(2);
+        setForgotStep(2);
       } else {
         setError(data.message || 'Failed to send OTP.');
       }
@@ -129,40 +123,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
     }
   };
 
-  // Handle Verify OTP (POST /auth/verify-otp)
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    if (!otp || otp.length !== 6) {
-      setError('Please enter the 6-digit OTP code.');
-      return;
-    }
-
-    setError('');
-    setSuccess('');
-    setLoading(true);
-
-    try {
-      const res = await fetch('http://localhost:3000/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email.trim(), otp: otp.trim() }),
-      });
-      const data = await res.json();
-
-      if (res.ok && data.success && data.verified) {
-        setOtpVerified(true);
-        setSuccess('OTP verified successfully! Identity confirmed.');
-      } else {
-        setError(data.message || 'Invalid or expired OTP code.');
-      }
-    } catch (err) {
-      setError('Could not connect to backend server at http://localhost:3000');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle Password Reset via OTP (POST /auth/reset-password)
+  // Handle Reset Password Submit (POST /auth/reset-password)
   const handleResetPasswordSubmit = async (e) => {
     e.preventDefault();
     if (!otp || otp.length !== 6) {
@@ -221,8 +182,6 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
             ? 'Welcome Back' 
             : mode === 'register' 
             ? 'Join MindCare Portal' 
-            : mode === 'otp' 
-            ? 'OTP Quick Verify' 
             : 'Reset Password'}
         </h2>
         <p className="text-xs text-slate-500 font-semibold">
@@ -230,53 +189,40 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
             ? 'Sign in to access your confidential care portal' 
             : mode === 'register' 
             ? 'Create your private care account' 
-            : mode === 'otp'
-            ? 'Enter email to send and verify 6-digit OTP code'
-            : 'Reset your password securely using a 6-digit OTP code'}
+            : 'Enter your email to receive a 6-digit OTP code'}
         </p>
       </div>
 
-      {/* 3-in-1 MODE TOGGLE TABS */}
-      <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200/80 gap-0.5">
-        <button
-          type="button"
-          onClick={() => handleTabSwitch('login')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-            mode === 'login'
-              ? 'bg-white text-slate-900 shadow-xs'
-              : 'text-slate-500 hover:text-slate-900'
-          }`}
-        >
-          <LogIn className="w-3.5 h-3.5" />
-          <span>Sign In</span>
-        </button>
+      {/* 2 MAIN MODE TOGGLE TABS (Sign In / Register) */}
+      {mode !== 'forgot' && (
+        <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200/80">
+          <button
+            type="button"
+            onClick={() => handleTabSwitch('login')}
+            className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+              mode === 'login'
+                ? 'bg-white text-slate-900 shadow-xs'
+                : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <LogIn className="w-3.5 h-3.5" />
+            <span>Sign In</span>
+          </button>
 
-        <button
-          type="button"
-          onClick={() => handleTabSwitch('register')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-            mode === 'register'
-              ? 'bg-white text-slate-900 shadow-xs'
-              : 'text-slate-500 hover:text-slate-900'
-          }`}
-        >
-          <UserPlus className="w-3.5 h-3.5" />
-          <span>Register</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => handleTabSwitch('forgot')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-            mode === 'forgot'
-              ? 'bg-amber-500 text-white shadow-xs'
-              : 'text-slate-600 hover:text-amber-700 font-bold'
-          }`}
-        >
-          <KeyRound className="w-3.5 h-3.5" />
-          <span>Forgot Pass?</span>
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => handleTabSwitch('register')}
+            className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+              mode === 'register'
+                ? 'bg-white text-slate-900 shadow-xs'
+                : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>Create Account</span>
+          </button>
+        </div>
+      )}
 
       {/* Alerts */}
       {error && (
@@ -288,7 +234,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
       {success && (
         <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold space-y-2">
           <div>{success}</div>
-          {receivedOtpHint && (mode === 'otp' ? !otpVerified : mode === 'forgot') && (
+          {receivedOtpHint && mode === 'forgot' && (
             <div className="p-2 bg-emerald-100/80 rounded-xl text-emerald-950 text-xs flex items-center justify-between font-mono">
               <span>Simulated OTP: <strong>{receivedOtpHint}</strong></span>
               <button
@@ -392,12 +338,12 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
         </form>
       )}
 
-      {/* MODE 3: FORGOT PASSWORD VIA OTP */}
+      {/* MODE 3: FORGOT PASSWORD (OTP RESET FLOW) */}
       {mode === 'forgot' && (
         <div className="space-y-4">
           {forgotStep === 1 ? (
-            /* FORGOT STEP 1: Request OTP code for password reset */
-            <form onSubmit={(e) => handleSendOtp(e, setForgotStep)} className="space-y-3.5">
+            /* STEP 1: Request OTP for password reset */
+            <form onSubmit={handleSendResetOtp} className="space-y-3.5">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">Registered Email Address</label>
                 <input
@@ -414,14 +360,14 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold text-xs transition-all disabled:opacity-50 mt-1 cursor-pointer shadow-md shadow-amber-600/20 active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs transition-all disabled:opacity-50 mt-1 cursor-pointer shadow-md shadow-emerald-600/20 active:scale-95 flex items-center justify-center gap-2"
               >
                 {loading ? 'Sending Reset OTP...' : 'Send Reset OTP Code'}
                 {!loading && <ArrowRight className="w-4 h-4" />}
               </button>
             </form>
           ) : (
-            /* FORGOT STEP 2: Enter 6-digit OTP + New Password */
+            /* STEP 2: Enter 6-digit OTP + New Password */
             <form onSubmit={handleResetPasswordSubmit} className="space-y-3.5">
               <div>
                 <div className="flex items-center justify-between mb-1">
@@ -429,7 +375,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
                   <button
                     type="button"
                     onClick={() => setForgotStep(1)}
-                    className="text-[11px] font-bold text-amber-700 hover:underline cursor-pointer"
+                    className="text-[11px] font-bold text-emerald-700 hover:underline cursor-pointer"
                   >
                     Resend OTP
                   </button>
@@ -441,7 +387,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                   placeholder="483921"
-                  className="w-full px-4 py-2.5 text-center tracking-[0.3em] font-mono text-base font-bold rounded-2xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all shadow-xs"
+                  className="w-full px-4 py-2.5 text-center tracking-[0.3em] font-mono text-base font-bold rounded-2xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all shadow-xs"
                 />
               </div>
 
@@ -453,7 +399,7 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="At least 6 characters"
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-300 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-300 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
                 />
               </div>
 
@@ -465,14 +411,14 @@ export default function AuthForm({ initialTab = 'login', onLoginSuccess, onRegis
                   value={confirmNewPassword}
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
                   placeholder="Repeat new password"
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-300 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-white border border-slate-300 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading || otp.length !== 6}
-                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold text-xs transition-all disabled:opacity-50 mt-1 cursor-pointer shadow-md shadow-amber-600/20 active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs transition-all disabled:opacity-50 mt-1 cursor-pointer shadow-md shadow-emerald-600/20 active:scale-95 flex items-center justify-center gap-2"
               >
                 {loading ? 'Resetting Password...' : 'Reset Password & Sign In'}
                 {!loading && <CheckCircle2 className="w-4 h-4" />}

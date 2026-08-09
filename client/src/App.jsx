@@ -191,7 +191,6 @@ export default function App() {
                 )
               }
             />
-            <Route path="/verify-otp" element={<OtpPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
