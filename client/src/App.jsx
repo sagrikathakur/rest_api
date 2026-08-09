@@ -9,6 +9,7 @@ import TherapistsPage from './pages/TherapistsPage';
 import JournalPage from './pages/JournalPage';
 import ProfilePage from './pages/ProfilePage';
 import AppointmentPage from './pages/AppointmentPage';
+import OtpPage from './pages/OtpPage';
 
 export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem('token') || '');
@@ -190,6 +191,7 @@ export default function App() {
                 )
               }
             />
+            <Route path="/verify-otp" element={<OtpPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

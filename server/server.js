@@ -2,13 +2,18 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRegisterRouter from './routes/userRegister.js';
+import authRouter from './routes/authRoutes.js';
+import { initOtpTable } from './models/otpModel.js';
 import { safeJsonParser } from './middlewares/jsonParser.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
 dotenv.config();
 
 const myServer = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
+
+// Initialize database tables
+initOtpTable();
 
 // Middlewares
 myServer.use(cors());
@@ -21,6 +26,8 @@ myServer.use(safeJsonParser);
 myServer.get('/', (req, res) => {
   res.send('hello');
 });
+myServer.use('/auth', authRouter);
+myServer.use('/api/auth', authRouter);
 myServer.use('/api', userRegisterRouter);
 
 // 404 Route Not Found Handler
@@ -39,4 +46,5 @@ myServer.use(errorHandler);
 myServer.listen(port, () => {
   console.log(`server is running on port ${port}`);
 });
+
 

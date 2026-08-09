@@ -28,6 +28,15 @@ export const getAllUsers = async () => {
   return result.rows;
 };
 
+// update user password //
+export const updateUserPassword = async (email, hashedPassword) => {
+  const result = await pool.query(
+    `UPDATE userRegister SET password = $1 WHERE email = $2 RETURNING id, name, email`,
+    [hashedPassword, email]
+  );
+  return result.rows[0];
+};
+
 
 
 
